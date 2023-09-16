@@ -1,0 +1,19 @@
+.carousel-caption{
+    right: 45%;
+    opacity: 0.5;
+    text-align: left;
+}
+
+.carousel-caption h2 {
+    background-color: white;
+    color: black;
+    padding-left: 10px;
+    border-radius: 5px;
+}
+
+.carousel-caption h5 {
+    background-color: white;
+    color: black;
+    padding-left: 10px;
+    border-radius: 5px;
+}

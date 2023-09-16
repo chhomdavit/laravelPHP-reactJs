@@ -1,0 +1,11 @@
+
+.main-footer{
+    background-image: url(../../image/footer-background.jpg);
+    background-size: cover;
+    height: 350px;
+}
+.sub-footer{
+   padding-top: 130px;
+   color: white;
+   text-align: center;
+}

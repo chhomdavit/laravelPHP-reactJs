@@ -1,0 +1,16 @@
+.left-profile{
+    display: flex;
+    flex-direction: column;
+    left: 15%;
+    margin-top: 5%;
+}
+
+.right-profile{
+    left: 5%;
+    margin-top: 15px;
+}
+
+.vl {
+    border-left: 6px solid #000DFF;
+    height: 500px;
+  }

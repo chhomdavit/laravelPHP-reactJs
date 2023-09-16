@@ -1,0 +1,11 @@
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding-bottom: 20px;
+  }
+  
+  .search-bar {
+    width: 50%;
+  }
