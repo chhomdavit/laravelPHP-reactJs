@@ -13,10 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [\App\Http\Controllers\PageController::class, 'home'])->name('pages.home');
+Route::get('/about', [\App\Http\Controllers\PageController::class, 'about'])->name('pages.about');
 
 Auth::routes();
 
-Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
+Route::get('/admin/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
+Route::get('/admin/categories/create', [\App\Http\Controllers\CategoryController::class, 'create'])->name('categories.create');
+Route::post('/admin/categories', [\App\Http\Controllers\CategoryController::class, 'store'])->name('categories.store');
+Route::get('/admin/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'edit'])->name('categories.edit');
+Route::put('/admin/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'update'])->name('categories.update');
+
