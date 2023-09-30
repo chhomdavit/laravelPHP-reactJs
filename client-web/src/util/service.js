@@ -2,7 +2,7 @@ import dayjs from "dayjs"
 
 export const Config = {
     pagination : 5,
-    imagePath : "http://localhost/image_path/"
+    imagePath : "http://127.0.0.1:8000/storage/posts/"
 }
 
 export const isEmptyOrNull = (value) => {
@@ -14,7 +14,7 @@ export const isEmptyOrNull = (value) => {
 
 export const formatDateForClient = (date) => {
     if(!isEmptyOrNull(date)){
-        return dayjs(date).format("DD/MM/YYYY")
+        return dayjs(date).format("ថ្ងៃDD/ ខែMM/ ឆ្នាំYYYY")
     }
     return null
 }

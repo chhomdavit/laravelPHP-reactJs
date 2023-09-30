@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import { request } from "../../util/api";
 import { Button, Form, message, Input} from "antd";
@@ -12,7 +13,7 @@ const Login = () => {
       password: fields.password,
     };
     setLoading(true)
-    request("post", "auth/login", params).then((res) => {
+    request("post", "login", params).then((res) => {
       console.log(res)
       return false
       setTimeout(() => {

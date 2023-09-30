@@ -51,9 +51,9 @@ const Dashboard = (props) => {
       label: 'Admin User',
     },
     {
-      key: '/dashboard/customerUser',
+      key: '/dashboard/category',
       icon: <UsergroupAddOutlined />,
-      label: 'Customer User',
+      label: 'Category',
     },
     {
       key: '/dashboard/customerPost',

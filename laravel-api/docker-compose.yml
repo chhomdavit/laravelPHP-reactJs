@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+   db:
+      image: mysql:latest
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+      volumes:
+        - data:/var/lib/mysql
+      ports:
+        - 33065:3306
+
+   phpmyadmin:
+      image: phpmyadmin:latest
+      ports:
+        - "8085:80"
+      environment:
+        PMA_HOST: db
+        MYSQL_ROOT_PASSWORD: root
+      depends_on:
+         - db
+      volumes:
+        - phpmyadmin:/sessions
+
+volumes:
+  data:
+  phpmyadmin:

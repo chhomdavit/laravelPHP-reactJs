@@ -20,6 +20,7 @@ import NotFoundPage from "./page/NotFoundPage/NotFoundPage";
 import ProfilePage from "./page/ProfilePage/ProfilePage";
 import CartPage from "./page/CartPage/CartPage";
 import ProductDetailPage from "./page/ProductDetailPage/ProductDetailPage";
+import Category from "./admin-page/Category/Category";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
 
   useEffect(() => {
     console.log(window.location.pathname)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.location.pathname])
 
   const is_dashboard = window.location.pathname.includes("dashboard")
@@ -61,6 +63,7 @@ function App() {
                   <Route path="dashboard" >
                     <Route index element={<Home />} />
                     <Route path="product" element={<Product />} />
+                    <Route path="category" element={<Category />} />
                     <Route path="*" element={<NotFoundPage />} />
                   </Route>
                 </Routes>
