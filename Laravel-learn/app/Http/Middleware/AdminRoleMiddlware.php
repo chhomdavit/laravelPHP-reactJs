@@ -18,6 +18,10 @@ class AdminRoleMiddlware
         if (auth()->user()->role !== 'Admin') {
             return abort(403);
         }
+
+        if (auth()->user()->role !== 'User') {
+            return abort(403);
+        }
         return $next($request);
     }
 }

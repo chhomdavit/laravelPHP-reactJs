@@ -66,46 +66,48 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 
-<div class="col-xs-12 col-sm-12 col-md-12">
-    <label for="imageInput" class="form-label">Image</label>
-    <input type="file" required class="form-control" id="imageInput" name="imageInput" onchange="displayPreview(this)">
-</div>
 
-<!-- Add a div to display the image preview -->
-<div class="col-xs-12 col-sm-12 col-md-12">
-    <label for="" class="form-label">Image Preview</label>
-    <img src="" id="previewImage" width="200px"/>
-</div>
 
-<script> 
-function displayPreview(input) {  
-    if (input.files && input.files[0]) { 
-        var fileReader = new FileReader(); 
-        fileReader.onload = function(e) { 
-            document.getElementById('previewImage').src = e.target.result; 
-        }  
-        fileReader.readAsDataURL(input.files[0]); 
-    } 
-} 
-</script><div class="col-xs-12 col-sm-12 col-md-12">
-    <label for="imageInput" class="form-label">Image</label>
-    <input type="file" required class="form-control" id="imageInput" name="imageInput" onchange="displayPreview(this)">
-</div>
+============================================================
 
-<!-- Add a div to display the image preview -->
-<div class="col-xs-12 col-sm-12 col-md-12">
-    <label for="" class="form-label">Image Preview</label>
-    <img src="" id="previewImage" width="200px"/>
-</div>
 
-<script> 
-function displayPreview(input) {  
-    if (input.files && input.files[0]) { 
-        var fileReader = new FileReader(); 
-        fileReader.onload = function(e) { 
-            document.getElementById('previewImage').src = e.target.result; 
-        }  
-        fileReader.readAsDataURL(input.files[0]); 
-    } 
-} 
-</script>
+public function storeCheckout(Request $request)
+    {
+        $order = new Order();
+        $order->order_status_id = 1;
+        $order->payment_method_id = 1;
+        $order->author_id = auth()->id();
+        $order->bill = $request->input('bill');
+        $order->address = $request->input('address');
+        $order->phone = $request->input('phone');
+
+        if($order->save()){
+            $carts = Cart::where('author_id', auth()->id())->get();
+
+            foreach($carts as $item)
+            {
+               $orderProduct = new OrderProduct();
+               $orderProduct->product_id = $item->product_id;
+               $orderProduct->quantity = $item->quantity;
+               $orderProduct->order_id = $order->id;
+
+               if($orderProduct->save()){
+                   $item->delete();
+               }
+            }
+        }
+        return redirect()->route('pages.cart.index');
+    }
+
+rewrite this code fix error on Base table or view not found: 1146 Table 'laravel-learn.order_products' doesn't exist
+
+protected $fillable = [
+        'product_id',
+        'order_id',
+        'author_id',
+        'quantity',
+    ];
+
+
+$table->foreignId('order_id')->constrained()->onDelete('cascade');
+$table->foreignId('product_id')->constrained()->onDelete('cascade');
