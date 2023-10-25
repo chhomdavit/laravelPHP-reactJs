@@ -2,6 +2,16 @@
 
 @section('content')
 <!-- Post preview-->
+
+<form action="{{ route('pages.home')}}" method="GET">
+    <div class="input-group mb-3 w-50" style="left: 30%">
+        <div class="input-group-prepend">
+          <button class="btn btn-outline-primary" type="submit">Search</button>
+        </div>
+          <input type="text" name="search" class="form-control" placeholder="search here...">
+    </div>
+</form>
+
 <div class="row row-cols-1 row-cols-md-3 g-4">
     @foreach ($products as $product)
     <div class="col">
@@ -11,33 +21,26 @@
             <h5 class="card-title">{{ $product->title }}</h5>
             <p class="card-text">{{ $product->description }}</p>
 
-            {{-- add to wishlist --}}
-            <form method="POST" action="{{ route('pages.cart.addToCart', $product->id) }}">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <button type="submit" class="btn btn-outline-danger">
-                  Add to Card
-                </button>
-            </form>
-
-              {{-- add to wishlist --}}
-              {{-- <form method="POST" action="{{ route('pages.wishlist.addToWishlist', $product->id) }}" id="wishlistForm">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <a href="#" onclick="changeIcon(this);">
-                    <i id="heartIcon" class="{{ $product->is_wished ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
-                </a>
-              </form> --}}
-
-
-              <form method="POST" action="{{ route('pages.wishlist.addToWishlist', $product->id) }}">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <a href="#" onclick="this.closest('form').submit(); return false;">
-                    <i class="fa-regular fa-heart"></i>
-                    {{-- <i class="fa-solid fa-heart"></i> --}}
-                </a>
-              </form>
+            <div class="row">
+                <div class="col-md-6">
+                    <form method="POST" action="{{ route('pages.cart.addToCart', $product->id) }}">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <button type="submit" class="btn btn-outline-danger">
+                          Add to Card
+                        </button>
+                    </form>
+                </div>
+                <div class="col-md-6" style="left: 20%">
+                    <form method="POST" action="{{ route('pages.wishlist.addToWishlist', $product->id) }}">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <a href="#" onclick="this.closest('form').submit(); return false;">
+                            <i class="fa-regular fa-heart"></i>
+                        </a>
+                      </form>
+                </div>
+            </div>
           </div>
         </div>
       </div>

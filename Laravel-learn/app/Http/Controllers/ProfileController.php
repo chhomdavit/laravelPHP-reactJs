@@ -12,7 +12,7 @@ class ProfileController extends Controller
     public function index()
     {
         $user = User::pluck('name', 'id')->toArray();
-        $profile =Profile::all();
+        $profile =User::all();
         return view('admin.profiles.index')->with(['profiles' => $profile, 'users' => $user]);
     }
 

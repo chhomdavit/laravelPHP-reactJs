@@ -14,7 +14,7 @@
                 <th class="col-md-2">Image</th>
                 <th class="col-md-2">Description</th>
                 <th class="col-md-1">
-                    <a class="btn btn-success rounded" href="{{ route('admin.products.store') }}" data-toggle="modal" data-target="#modal-create">New Post
+                    <a class="btn btn-success rounded elevation-3" href="{{ route('admin.products.store') }}" data-toggle="modal" data-target="#modal-create">New Post
                     </a>
                 </th>
             </tr>
@@ -34,21 +34,21 @@
                         <td>{{ $product->author?->name }}</td>
                         <td>
                             @if(!empty($product->image))
-                            <img src="{{ asset('/storage/products/' . $product->image) }}" class="rounded" style="width: 200px" height="150px"/>
+                            <img src="{{ asset('/storage/products/' . $product->image) }}" class="rounded elevation-3" style="width: 150px; height: 100px;"/>
                             @endif
                         </td>
                         <td>{{ $product->description }}</td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 @can('updateProduct', $product)
-                                    <a class="btn btn-primary rounded" href="{{ route('admin.posts.update', $product->id) }}" data-toggle="modal" data-target="#modal-update{{ $product->id }}">
+                                    <a class="btn btn-primary rounded elevation-3" href="{{ route('admin.products.update', $product->id) }}" data-toggle="modal" data-target="#modal-update{{ $product->id }}">
                                         Edit
                                     </a>
                                 @endcan
 
                                 &nbsp;
                                 @can('deleteProduct', $product)
-                                    <a class="btn btn-danger rounded" href="{{ route('admin.posts.forceDestroy', $product->id) }}" data-toggle="modal" data-target="#modal-delete{{ $product->id }}">
+                                    <a class="btn btn-danger rounded elevation-3" href="{{ route('admin.products.forceDestroy', $product->id) }}" data-toggle="modal" data-target="#modal-delete{{ $product->id }}">
                                         Delete
                                     </a>
                                 @endcan

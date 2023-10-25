@@ -70,44 +70,108 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ============================================================
 
+@section('content')
+<div class="card-body table-responsive p-0">
+    <div class="row">
+        <div class="col-md-10 p-5 m-auto">
+            <div class="card">
+                <div class="card-title m-auto">
+                    <h2 class="bg-white">Your Order</h2>
+                </div>
+                <hr/>
+                <div class="card-body">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1">No</th>
+                                <th class="col-md-1">Product</th>
+                                <th class="col-md-1">Price</th>
+                                <th class="col-md-1">Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if($productOrders->isEmpty())
+                                <tr>
+                                    <td colspan="5">There is no record.</td>
+                                </tr>
+                            @else
+                                @foreach($productOrders as $productOrder)
+                                    <tr>
+                                        <td scope="row">{{ $loop->index + 1 }}</td>
+                                        <td>{{ $productOrder->product->title}}</td>
+                                        <td>$ {{ $productOrder->product->price}}</td>
+                                        <td>{{ $productOrder->quantity}}</td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </tbody>
+                    </table>
 
-public function storeCheckout(Request $request)
-    {
-        $order = new Order();
-        $order->order_status_id = 1;
-        $order->payment_method_id = 1;
-        $order->author_id = auth()->id();
-        $order->bill = $request->input('bill');
-        $order->address = $request->input('address');
-        $order->phone = $request->input('phone');
+                    <hr/>
 
-        if($order->save()){
-            $carts = Cart::where('author_id', auth()->id())->get();
+                    @if($orders->isEmpty())
+                        <tr>
+                            <td colspan="5">There is no record.</td>
+                        </tr>
+                    @else
+                        @foreach($orders as $order)
+                            <div class="d-flex justify-content-between">
+                                <div><h5>Total Price</h5></div>
+                                <div
+                                    class="badge bg-primary text-wrap"
+                                    style="width: 6rem; ">
+                                    <h5>$ {{ $order->bill }}</h5>
+                                </div>
+                                <div
+                                    class="badge bg-success text-wrap"
+                                    style="width: 10rem; ">
+                                    <h5>{{ $order->status->title }}</h5>
+                                </div>
+                                </div>
+                        @endforeach
+                    @endif
 
-            foreach($carts as $item)
-            {
-               $orderProduct = new OrderProduct();
-               $orderProduct->product_id = $item->product_id;
-               $orderProduct->quantity = $item->quantity;
-               $orderProduct->order_id = $order->id;
+                </div>
+            </div>
+        </div>
 
-               if($orderProduct->save()){
-                   $item->delete();
-               }
-            }
+    </div>
+</div>
+@endsection
+
+
+rewrite this code to multi result if result get different order_id
+
+
+
+
+
+
+public function indexOrder() 
+{ 
+    $user = Auth::user(); 
+    $order = Order::where('author_id', $user->id)->get(); 
+    $productOrder = ProductOrder::whereIn('order_id', $order->pluck('id'))->get();
+
+    // Group the product orders by order_id
+    $groupedProductOrder = $productOrder->groupBy('order_id');
+
+    // Loop through each group and check for duplicates
+    foreach ($groupedProductOrder as $group) {
+        // If there are more than one item in the group
+        if ($group->count() > 1) {
+            // Sum the quantities of the duplicate products
+            $totalQuantity = $group->sum('quantity');
+            // Assign the total quantity to the first item of the group
+            $group->first()->quantity = $totalQuantity;
         }
-        return redirect()->route('pages.cart.index');
     }
 
-rewrite this code fix error on Base table or view not found: 1146 Table 'laravel-learn.order_products' doesn't exist
+    // Flatten the grouped collection
+    $productOrder = $groupedProductOrder->flatten();
 
-protected $fillable = [
-        'product_id',
-        'order_id',
-        'author_id',
-        'quantity',
-    ];
-
-
-$table->foreignId('order_id')->constrained()->onDelete('cascade');
-$table->foreignId('product_id')->constrained()->onDelete('cascade');
+    return view('pages.order.index')->with([
+        'orders' => $order,
+        'productOrders'=> $productOrder,
+        ]);
+}

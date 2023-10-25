@@ -1,4 +1,4 @@
-@extends('layouts.page')
+{{-- @extends('layouts.page')
 
 @section('content')
 <h1>My Profile</h1>
@@ -69,5 +69,53 @@
         @endif
     </tbody>
 </div>
-@endsection
+@endsection --}}
 
+{{-- ============================================ --}}
+
+@extends('layouts.page')
+@section('content')
+<h1>My Profile</h1>
+<div class="card-body table-responsive p-0">
+    @if($users)
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12" style="">
+                    @if(!empty($users->image))
+                    <img src="{{ asset('/storage/users/' . $users->image) }}" style="width: 150px; height: 150px;" class="rounded-circle img-thumbnail shadow p-3 m-5"/>
+                    @endif
+                </div>
+
+                <div class="col-md-12">
+                    <table class="table">
+                        <tbody>
+
+                            <tr>
+                                <td style="font-weight: 700">Name</td>
+                                <td class="text-uppercase" style="font-weight: 900; font-size: 20px">{{ $users->name }}</td>
+                            </tr>
+
+                            <tr>
+                                <td style="font-weight: 700">Email</td>
+                                <td>{{ $users->email }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <a class="btn btn-primary rounded"
+                                        href="{{ route('pages.profile.update', $users->id) }}" data-toggle="modal"
+                                        data-target="#Update-Modal{{ $users->id }}">
+                                        Update
+                                    </a>
+                                </td>
+                                @include('pages.profile.modal.edit')
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
+</div>
+@endsection

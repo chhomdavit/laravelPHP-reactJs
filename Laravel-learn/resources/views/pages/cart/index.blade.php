@@ -64,6 +64,7 @@
                 <div class="badge bg-primary text-wrap" style="width: 10rem;"><h3>$ {{ $totalPrice }}</h3></div>
             </div>
         </div>
+
         <div class="col-md-4 p-5">
             <div class="card">
                 <div class="card-title m-auto">
@@ -91,12 +92,18 @@
                             <input type="text" name="address" class="form-control mt-2" placeholder="Enter Address" id="" required>
                             <input type="text" name="phone" class="form-control mt-2" placeholder="Enter phone" id="" required>
                             <input type="hidden" name="bill" class="form-control mt-2" value="{{ $totalPrice }}" placeholder="Enter Address" id="">
+                            <select class="form-select mt-2" id="payment_method_id" name="payment_method_id">
+                                <option value="1">Payment Method</option>
+                                <option value="1">ABA Bank</option>
+                                <option value="2">Wing Bank</option>
+                            </select>
                             <input type="submit" name="checkout" class="btn btn-dark btn-block w-100  mt-2" value="Proceed to Checkout" id="">
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 @endsection

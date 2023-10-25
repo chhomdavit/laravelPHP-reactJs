@@ -14,4 +14,18 @@ class ProductOrder extends Model
         'author_id',
         'quantity',
     ];
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id', 'id');
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(User::class, 'order_id', 'id');
+    }
 }

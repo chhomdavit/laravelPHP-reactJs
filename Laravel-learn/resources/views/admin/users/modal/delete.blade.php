@@ -1,7 +1,7 @@
-<form action="{{ route('admin.products.forceDestroy', $product->id) }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('admin.users.forceDestroy', $user->id) }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('DELETE')
-    <div class="modal fade" id="modal-delete{{ $product->id }}">
+    <div class="modal fade" id="modal-delete{{ $user->id }}">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -11,7 +11,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    You sure you want to delete Post <b>{{ $product->title }}</b> ?
+                    You sure you want to delete ?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\payment_method;
 use App\Models\Product;
 use App\Models\ProductOrder;
 use App\Models\Profile;
@@ -11,15 +12,20 @@ use App\Models\User;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PageController extends Controller
 {
     //
-    public function home()
+    public function home(Request $request)
     {
-        $products = Product::all();
+        $products = Product::when($request->search, function($query, $search){
+            return $query->where('title','like', "%{$search}%");
+        })->get();;
         return view('pages.home', ['products' => $products]);
+
     }
 
     public function about()
@@ -35,7 +41,10 @@ class PageController extends Controller
     {
         $product = Product::pluck('image','price','title', 'id')->toArray();
         $cart = Auth::user()->cart;
-        return view('pages.cart.index')->with(['carts' => $cart, 'product'=>$product]);
+        return view('pages.cart.index')->with([
+            'carts' => $cart,
+            'product'=>$product
+        ]);
     }
 
     public function addToCart(Request $request)
@@ -75,6 +84,24 @@ class PageController extends Controller
 
 
 
+
+    // ================ ផ្នែក​ Order Controller =======================
+    public function indexOrder()
+    {
+        $user = Auth::user();
+        $order = Order::where('author_id', $user->id)->get();
+        $productOrder = ProductOrder::whereIn('order_id', $order->pluck('id'))->get();
+        return view('pages.order.index')->with([
+            'orders' => $order,
+            'productOrders'=> $productOrder,
+            ]);
+    }
+
+
+
+
+
+
     // ផ្នែក​ Checkout Controller
     public function indexCheckout()
     {
@@ -84,14 +111,19 @@ class PageController extends Controller
 
         $product = Product::pluck('image','price','title', 'id')->toArray();
         $cart = Auth::user()->cart;
-        return view('pages.checkout.index')->with(['carts' => $cart, 'product'=>$product]);
+        return view('pages.cart.index')->with([
+            'carts' => $cart,
+            'product'=>$product,
+        ]);
     }
+
 
     public function storeCheckout(Request $request)
     {
         $order = new Order();
         $order->order_status_id = 1;
-        $order->payment_method_id = 1;
+        // $order->payment_method_id = 1;
+        $order->payment_method_id = $request->input('payment_method_id');
         $order->author_id = auth()->id();
         $order->bill = $request->input('bill');
         $order->address = $request->input('address');
@@ -112,14 +144,8 @@ class PageController extends Controller
 
             }
         }
-        return redirect()->route('pages.cart.index');
+        return redirect()->route('pages.order.index');
     }
-
-
-
-
-
-
 
 
 
@@ -160,69 +186,41 @@ class PageController extends Controller
 
 
 
-
     // ================ ផ្នែក​ Profile Controller =======================
     public function index()
     {
-        $user =User::pluck('password','name','email','id')->toArray();
-        $profile = Auth::user()->profile;
-        return view('pages.profile.index')->with(['profiles' => $profile, 'users' => $user]);
+        $user = Auth::user();
+        return view('pages.profile.index')->with(['users' => $user]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'address_desc' => 'required',
-            'selectedImage' => 'nullable|image'
-        ]);
-
-        $profile = Profile::where('author_id', auth()->id())->first();
-        if ($profile) {
-            return back()->withErrors([
-                'profile' => 'You already have a profile!'
-            ]);
-        }
-
-        $profile = new Profile();
-        $profile->author_id = auth()->id();
-        $profile->telephone = $request->input('telephone');
-        $profile->address_desc = $request->input('address_desc');
-
-        $uploadImage = $request->file('selectedImage');
-        if ($uploadImage) {
-            $filename = time() . '_' . $uploadImage->getClientOriginalName();
-            $uploadImage->storeAs('public/profiles', $filename);
-            $profile->image = $filename;
-        }
-
-        $profile->save();
         return redirect(route('pages.profile.index'))->with('success', 'create success!');
     }
 
-    public function update(Profile $profile, Request $request)
+    public function update(user $user, Request $request)
     {
-        $request->validate([
-            'address_desc' => 'required',
-            'telephone' => 'required',
-            'selectedImage' => 'nullable|image'
-        ]);
+        if (Hash::check($request->input('old_password'), $user->password)) {
 
-        $request->all();
+            $user->name = $request->input('name');
+            $user->role = $request->input('role');
+            $user->email = $request->input('email');
+            $uploadImage = $request->file('selectedImage');
+                if (!empty($uploadImage)) {
+                   Storage::delete('public/users/' . $user->image);
+                    $filename = time() . '_' . $uploadImage->getClientOriginalName();
+                    $uploadImage->storeAs('public/users', $filename);
+                    $user->image = $filename;
+                }
+            $user->password = bcrypt($request->input('new_password'));
+            $user->save();
 
-        $profile->author_id = auth()->id();
-        $profile->address_desc = $request->input('address_desc');
-        $profile->telephone = $request->input('telephone');
-
-
-        $uploadImage = $request->file('selectedImage');
-        if (!empty($uploadImage)) {
-            Storage::delete('public/profiles/' . $profile->image);
-            $filename = time() . '_' . $uploadImage->getClientOriginalName();
-            $uploadImage->storeAs('public/profiles', $filename);
-            $profile->image = $filename;
+            return redirect(route('pages.profile.index'))->with('success', 'User updated successfully');
+        } else {
+            return back()->withErrors([
+                'old_password' => 'The provided old password is incorrect',
+            ]);
         }
-        $profile->save();
-        return redirect(route('pages.profile.index'))->with('success', 'update success!');
     }
 
     public function forceDestroy(Profile $profile, Request $request)

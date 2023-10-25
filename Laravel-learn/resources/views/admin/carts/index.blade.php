@@ -70,7 +70,7 @@
                         <td>{{ $cart->product->price }} $</td>
                         <td>
                             @if(!empty($cart->product->image))
-                            <img src="{{ asset('/storage/products/' . $cart->product->image) }}" class="w-50 h-30 rounded"/>
+                            <img src="{{ asset('/storage/products/' . $cart->product->image) }}" class="rounded elevation-3" style="width: 100px; height: 50px;"/>
                             @endif
                         </td>
                         <td>{{ $cart->product->price * $cart->quantity }} $</td>

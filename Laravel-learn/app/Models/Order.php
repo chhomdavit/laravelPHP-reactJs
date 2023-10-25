@@ -16,4 +16,17 @@ class Order extends Model
         'address',
         'phone',
     ];
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id', 'id');
+    }
+    public function status()
+    {
+        return $this->belongsTo(order_status::class, 'order_status_id', 'id');
+    }
+    public function  payment()
+    {
+        return $this->belongsTo(payment_method::class, 'payment_method_id', 'id');
+    }
+
 }

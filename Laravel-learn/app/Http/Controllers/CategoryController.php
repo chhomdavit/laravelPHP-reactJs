@@ -10,7 +10,7 @@ class CategoryController extends Controller
     // Get list of data
     public function index()
     {
-        $categories = Category::Paginate(2);
+        $categories = Category::Paginate(5);
          return view('admin.categories.index')->with('categories', $categories);
     }
 

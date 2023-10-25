@@ -11,13 +11,14 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ asset('/AdminLTE/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+            @if(!empty(Auth::user()->image))
+                <img src="{{ asset('/storage/users/' . Auth::user()->image) }}" class="brand-image img-circle elevation-3" style="opacity: .8"/>
+            @endif
         </div>
         <div class="info">
-          <a class="d-block" href="javascript:void">
-            <i class="fa-regular fa-user"></i>
-            {{ Auth::user()->name }}
-        </a>
+            <a class="d-block" href="javascript:void">
+                {{ Auth::user()->name }}
+            </a>
         </div>
       </div>
 
@@ -34,7 +35,8 @@
             </a>
             <ul class="nav nav-treeview">
 
-              <li class="nav-item">
+            @if (Auth::user()->role == 'Admin')
+                <li class="nav-item">
                 <a href="{{ route('admin.categories.index') }}" class="nav-link active">
                     <i class="fa-solid fa-list nav-icon"></i>
                   <p>Category</p>
@@ -42,23 +44,17 @@
               </li>
 
               <li class="nav-item">
-                <a href="{{ route('admin.posts.index') }}" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Post</p>
+                <a href="{{ route('admin.users.index') }}" class="nav-link active">
+                  <i class="fa-solid fa-user nav-icon"></i>
+                  <p>user</p>
                 </a>
               </li>
+            @endif
 
               <li class="nav-item">
                 <a href="{{ route('admin.products.index') }}" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Product</p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="{{ route('admin.users.index') }}" class="nav-link active">
-                  <i class="fa-solid fa-user nav-icon"></i>
-                  <p>user</p>
                 </a>
               </li>
 
@@ -70,16 +66,23 @@
               </li>
 
               <li class="nav-item">
-                <a href="{{ route('admin.profiles.index') }}" class="nav-link active">
+                <a href="{{ route('admin.wishlists.index') }}" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Profile</p>
+                  <p>Whislish</p>
                 </a>
               </li>
 
               <li class="nav-item">
-                <a href="{{ route('admin.wishlists.index') }}" class="nav-link active">
+                <a href="{{ route('admin.orders.index') }}" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Whislish</p>
+                  <p>Orders</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="#" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Sell Report</p>
                 </a>
               </li>
 
