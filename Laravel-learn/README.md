@@ -70,108 +70,63 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ============================================================
 
-@section('content')
-<div class="card-body table-responsive p-0">
-    <div class="row">
-        <div class="col-md-10 p-5 m-auto">
-            <div class="card">
-                <div class="card-title m-auto">
-                    <h2 class="bg-white">Your Order</h2>
+<script src="{{ asset('/AdminLTE/plugins/jquery/jquery.min.js') }}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ asset('/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset('/AdminLTE/dist/js/adminlte.min.js') }}"></script>
+
+
+
+<form action="{{route('admin.products.store')}}" method="post" enctype="multipart/form-data">
+    @csrf
+    <div class="modal fade" id="modal-create">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create Category</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <hr/>
-                <div class="card-body">
-                    <table class="table table-hover text-nowrap">
-                        <thead>
-                            <tr>
-                                <th class="col-md-1">No</th>
-                                <th class="col-md-1">Product</th>
-                                <th class="col-md-1">Price</th>
-                                <th class="col-md-1">Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if($productOrders->isEmpty())
-                                <tr>
-                                    <td colspan="5">There is no record.</td>
-                                </tr>
-                            @else
-                                @foreach($productOrders as $productOrder)
-                                    <tr>
-                                        <td scope="row">{{ $loop->index + 1 }}</td>
-                                        <td>{{ $productOrder->product->title}}</td>
-                                        <td>$ {{ $productOrder->product->price}}</td>
-                                        <td>{{ $productOrder->quantity}}</td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                <div class="modal-body">
 
-                    <hr/>
+                    <div class="col-xs-12 col-sm-12 col-md-12 form-group">
+                        <label for="selectedImage">Image</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="selectedImage" name="selectedImage">
+                                <label class="custom-file-label" for="selectedImage">Choose file</label>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <img src="" id="previewImage" width="150px" class="img-fluid img-thumbnail"/>
+                        </div>
+                    </div>
 
-                    @if($orders->isEmpty())
-                        <tr>
-                            <td colspan="5">There is no record.</td>
-                        </tr>
-                    @else
-                        @foreach($orders as $order)
-                            <div class="d-flex justify-content-between">
-                                <div><h5>Total Price</h5></div>
-                                <div
-                                    class="badge bg-primary text-wrap"
-                                    style="width: 6rem; ">
-                                    <h5>$ {{ $order->bill }}</h5>
-                                </div>
-                                <div
-                                    class="badge bg-success text-wrap"
-                                    style="width: 10rem; ">
-                                    <h5>{{ $order->status->title }}</h5>
-                                </div>
-                                </div>
-                        @endforeach
-                    @endif
 
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>
-
     </div>
-</div>
-@endsection
+</form>
 
-
-rewrite this code to multi result if result get different order_id
-
-
-
-
-
-
-public function indexOrder() 
-{ 
-    $user = Auth::user(); 
-    $order = Order::where('author_id', $user->id)->get(); 
-    $productOrder = ProductOrder::whereIn('order_id', $order->pluck('id'))->get();
-
-    // Group the product orders by order_id
-    $groupedProductOrder = $productOrder->groupBy('order_id');
-
-    // Loop through each group and check for duplicates
-    foreach ($groupedProductOrder as $group) {
-        // If there are more than one item in the group
-        if ($group->count() > 1) {
-            // Sum the quantities of the duplicate products
-            $totalQuantity = $group->sum('quantity');
-            // Assign the total quantity to the first item of the group
-            $group->first()->quantity = $totalQuantity;
-        }
-    }
-
-    // Flatten the grouped collection
-    $productOrder = $groupedProductOrder->flatten();
-
-    return view('pages.order.index')->with([
-        'orders' => $order,
-        'productOrders'=> $productOrder,
-        ]);
-}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#selectedImage').change(function(){
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#previewImage').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+    });
+    </script>
+ 
+rewrite this code to connect jquery @yield('')

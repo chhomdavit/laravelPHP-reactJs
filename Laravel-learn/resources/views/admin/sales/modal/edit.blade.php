@@ -1,7 +1,7 @@
 <form action="{{ route('admin.categories.update', $category->id) }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('PUT')
-    <div class="modal fade" id="modal-update{{ $category->id }}">
+    <div class="modal fade" id="modal-update">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

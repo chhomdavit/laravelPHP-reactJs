@@ -1,7 +1,7 @@
 <form action="{{ route('admin.categories.destroy', $category->id) }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('DELETE')
-    <div class="modal fade" id="modal-delete{{ $category->id }}">
+    <div class="modal fade" id="modal-delete">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

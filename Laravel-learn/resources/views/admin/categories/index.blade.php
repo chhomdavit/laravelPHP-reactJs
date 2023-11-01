@@ -29,11 +29,11 @@
                             <td>{{ $category->description }}</td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <a class="btn btn-primary rounded" href="{{ route('admin.categories.update', $category->id) }}" data-toggle="modal" data-target="#modal-update">
+                                    <a class="btn btn-primary rounded" href="{{ route('admin.categories.update', $category->id) }}" data-toggle="modal" data-target="#modal-update{{ $category->id }}">
                                         Update
                                      </a>
                                     &nbsp;
-                                    <a class="btn btn-danger rounded" href="{{ route('admin.categories.destroy', $category->id) }}" data-toggle="modal" data-target="#modal-delete">
+                                    <a class="btn btn-danger rounded" href="{{ route('admin.categories.destroy', $category->id) }}" data-toggle="modal" data-target="#modal-delete{{ $category->id }}">
                                         Delete
                                      </a>
                                 </div>

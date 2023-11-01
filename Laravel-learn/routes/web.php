@@ -69,7 +69,8 @@ Route::group([
                 Route::get('/categories', 'index')->name('admin.categories.index');
                 Route::post('/categories', 'store')->name('admin.categories.store');
                 Route::put('/categories/{category}', 'update')->name('admin.categories.update');
-                Route::delete('/categories/{category}', 'forceDestroy')->name('admin.categories.forceDestroy');
+                Route::delete('/categories/{category}', 'destroy')->name('admin.categories.destroy');
+                // Route::delete('/categories/{category}', 'forceDestroy')->name('admin.categories.forceDestroy');
             });
 
             Route::controller(\App\Http\Controllers\UserController::class)->group(function(){
@@ -113,6 +114,10 @@ Route::group([
         Route::controller(\App\Http\Controllers\OrderController::class)->group(function(){
             Route::get('/order', 'index')->name('admin.orders.index');
             Route::put('/order/{order}', 'update')->name('admin.orders.update');
+        });
+
+        Route::controller(\App\Http\Controllers\SaleController::class)->group(function(){
+            Route::get('/sales', 'index')->name('admin.sales.index');
         });
 
     });

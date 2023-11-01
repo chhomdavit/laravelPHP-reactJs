@@ -31,11 +31,25 @@
                         </select>
                     </div>
 
-                    <div class="col-xs-12 col-sm-12 col-md-12">
+                    {{-- <div class="col-xs-12 col-sm-12 col-md-12">
                         <label for="selectedImage" class="form-label">Image</label>
-                        <input type="file" required class="form-control" id="selectedImage" name="selectedImage">
-                        <img src="" id="previewImage" width="200px"/>
+                        <input type="file" class="form-control" id="selectedImage" name="selectedImage">
+                        <img src="" id="previewImage" style="margin-top: 10px" width="150px" class="elevation-3 rounded"/>
+                    </div> --}}
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 form-group">
+                        <label for="selectedImage">Image</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="selectedImage" name="selectedImage">
+                                <label class="custom-file-label" for="selectedImage">Choose file</label>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <img src="" id="previewImage" width="150px" class="img-fluid img-thumbnail"/>
+                        </div>
                     </div>
+
 
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <label for="description" class="form-label">Description</label>
@@ -52,3 +66,15 @@
     </div>
 </form>
 
+<script src="{{ asset('/AdminLTE/plugins/jquery/jquery.min.js') }}"></script>
+<script>
+    $(document).ready(function(){
+        $('#selectedImage').change(function(){
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#previewImage').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+    });
+    </script>
